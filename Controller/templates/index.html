@@ -87,22 +87,22 @@
                     </tr>
                 </thead>
                 <tbody id="tbody">
-                    {{foreach $arrays as $array}}
+                    {{foreach $articleObj as $articleData}}
                     <tr>
                         <td>
-                            {{$array['title']}}
+                            {{$articleData['title']}}
                         </td>
                         <td>
-                            {{$array['content']}}
+                            {{$articleData['content']}}
                         </td>
                         <td>
-                            {{$array['nickname']}}
+                            {{$articleData['nickName']}}
                         </td>
                         <td>
-                            {{$array['create_date']}}
+                            {{$articleData['createDate']}}
                         </td>
                         <td class="col-fixed-view">
-                            <a href="article.php?id={{$array['article_id']}}" class="btn btn-info col-md-10" role="button">瀏覽</a>
+                            <a href="article.php?id={{$articleData['articleId']}}" class="btn btn-info col-md-10" role="button">瀏覽</a>
                         </td>
                     </tr>
                     {{/foreach}}

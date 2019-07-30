@@ -4,47 +4,44 @@ require_once('../Model/Article.php');
 require_once('../Model/Member.php');
 require_once('smarty.php');
 
-// ##驗證登入
-// if (isset($_COOKIE['token'])) {
-//     $token = $_COOKIE['token'];
-//     $useMemberDb = new Member();
-//     $isCheck = $useMemberDb->checkToken($token);
-//     if ($isCheck === true) {
-//         $memberData = $useMemberDb->getAll();
-//         $memberData['nickName']
+$useMemberTb = new Member();
+$useArticleTb = new Article();
 
-//         // $smarty->assign('nickname', $_COOKIE['nickname']);
-//     }
-// }
+## 驗證登入
+if (isset($_COOKIE['token'])) {
+    $token = $_COOKIE['token'];
+    $token = 123;
+    $isCheck = $useMemberTb->checkToken($token);
+    if ($isCheck === true) {
+        $memberData = $useMemberTb->getAll($token);
+    }
+}
 
-$useMemberDb = new Member();
-$memberData = $useMemberDb->getAll();
-$memberData['nickName'];
-exit;
+$memberData = $useMemberTb->getAll(123);
 
 ##因ajax關係，須給他page值
-if ($_SERVER['QUERY_STRING'] === "") {
-    $page = 1;
-} else {
-    $page = $_GET['page'];
-}
+// if ($_SERVER['QUERY_STRING'] === "") {
+//     $page = 1;
+// } elseif (!is_numeric($_GET['page'])) {
+//     $page = 1;
+// }
 
 ## 從start筆開始，往後五筆
 $start = ($page - 1) * 5;
 $count = 5;
 
-$user = new Article();
-$result = $user->show_article_page($start, $count);
-## 上面亂打導回首頁page1
-if ($result['row_result'] === 0) {
+## 檢查該分頁是否有資料
+$checkPage = $useArticleTb->checkPage($start, $count);
+## 沒有則導回首頁page1
+if ($checkPage === false) {
     header("Location: index.php?page=1");
 }
 
-$user = new Article();
-$row_result = $user->show_article();
+## 取得主資料有幾筆
+$articleDataCount = $useArticleTb->getArticleDataCount();
 
 ## 每五筆一頁，計算
-($row_result % 5 === 0) ? ($PageTotals = $row_result / 5) : ($PageTotals = $row_result / 5 + 1);
+($articleDataCount % 5 === 0) ? ($PageTotals = $articleDataCount / 5) : ($PageTotals = $articleDataCount / 5 + 1);
 $PageTotals = (int)$PageTotals;
 
 ## 最多只會出現五個分頁
@@ -71,8 +68,11 @@ if ($PageTotals > 5) {
     $endPage = $PageTotals;
 }
 
+$articleObj = $useArticleTb->showArticlePage($start,$count);
+
+
 $smarty->assign('firstPage', $firstPage);
 $smarty->assign('endPage', $PageTotals);
 $smarty->assign('nowPage', $page);
-$smarty->assign('arrays', $result['result']);
+$smarty->assign('articleObj', $articleObj);
 $smarty->display("index.html"); 

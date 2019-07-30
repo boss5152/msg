@@ -31,7 +31,7 @@ class Member extends ConnectDb
      */
     public function checkAccount($account)
     {
-        $sql = "SELECT user_id FROM Member WHERE $account";
+        $sql = "SELECT userId FROM Member WHERE $account";
         $result = $this->executeSql($sql);
         $row_result = mysqli_num_rows($result);
         return ($row_result === 1) ? true : false;
@@ -42,7 +42,7 @@ class Member extends ConnectDb
      */
     public function checkNickName($nickName)
     {
-        $sql = "SELECT user_id FROM Member WHERE $nickName";
+        $sql = "SELECT userId FROM Member WHERE $nickName";
         $result = $this->executeSql($sql);
         $row_result = mysqli_num_rows($result);
         return ($row_result === 1) ? true : false;
@@ -53,7 +53,7 @@ class Member extends ConnectDb
      */
     public function checkToken($token)
     {
-        $sql = "SELECT user_id FROM Member WHERE token = " . $token;
+        $sql = "SELECT userId FROM Member WHERE token = " . $token;
         $result = $this->executeSql($sql);
         $row_result = mysqli_num_rows($result);
         return ($row_result === 1) ? true : false;
@@ -66,7 +66,8 @@ class Member extends ConnectDb
     public function getAll($token){
         $sql = "SELECT * FROM Member WHERE token = " . $token;
         $result = $this->executeSql($sql);
-        return $result;
+        $row_result = mysqli_fetch_assoc($result);
+        return $row_result;
     }
     
     /*
@@ -93,7 +94,7 @@ class Member extends ConnectDb
     /*
      * 修改
      */
-    public function update($array, $user_id)
+    public function update($array, $userId)
     {
         $update = '';
         foreach($array as $key => $value){
@@ -102,7 +103,7 @@ class Member extends ConnectDb
         //-1表示去掉最後一個','
         $update = substr($update, 0, -1);
         //執行
-        $sql = "UPDATE member set $update WHERE user_id = $user_id";
+        $sql = "UPDATE member set $update WHERE userId = $userId";
         $result = $this->executeSql($sql);
         return $result;
     }

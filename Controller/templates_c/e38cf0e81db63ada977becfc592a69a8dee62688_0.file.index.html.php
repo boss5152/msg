@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.33, created on 2019-07-30 11:48:40
+/* Smarty version 3.1.33, created on 2019-07-30 15:15:58
   from 'C:\xampp\htdocs\msg\Controller\templates\index.html' */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.33',
-  'unifunc' => 'content_5d401278cc6067_33410282',
+  'unifunc' => 'content_5d40430e749244_87814295',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'e38cf0e81db63ada977becfc592a69a8dee62688' => 
     array (
       0 => 'C:\\xampp\\htdocs\\msg\\Controller\\templates\\index.html',
-      1 => 1564480115,
+      1 => 1564492554,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_5d401278cc6067_33410282 (Smarty_Internal_Template $_smarty_tpl) {
+function content_5d40430e749244_87814295 (Smarty_Internal_Template $_smarty_tpl) {
 ?><!DOCTYPE html>
 <html>
     <head>
@@ -40,41 +40,41 @@ function content_5d401278cc6067_33410282 (Smarty_Internal_Template $_smarty_tpl)
  src="http://localhost/msg/Controller/javascript/tool.js"><?php echo '</script'; ?>
 >
     </head>
-        <style>
-            th{
-                text-align: center;
-            }
-            td{
-                text-align: center;
-            }
-            .col-fixed-title {
-                width: 120px;
-            }
-            .col-fixed-content {
-                width: 450px;
-            }
-            .col-fixed-user {
-                width: 10%;
-            }
-            .col-fixed-date {
-                width: 20%;
-            }
-            .col-fixed-view {
-                width: 10%;
-            }
-            #title{
-                width: 120px;
-                overflow:hidden;
-                text-overflow:ellipsis;
-                white-space:nowrap;
-            }
-            #content{
-                width: 450px;
-                overflow:hidden;
-                text-overflow:ellipsis;
-                white-space:nowrap;
-            }
-        </style>
+    <style>
+        th{
+            text-align: center;
+        }
+        td{
+            text-align: center;
+        }
+        .col-fixed-title {
+            width: 120px;
+        }
+        .col-fixed-content {
+            width: 450px;
+        }
+        .col-fixed-user {
+            width: 10%;
+        }
+        .col-fixed-date {
+            width: 20%;
+        }
+        .col-fixed-view {
+            width: 10%;
+        }
+        #title{
+            width: 120px;
+            overflow:hidden;
+            text-overflow:ellipsis;
+            white-space:nowrap;
+        }
+        #content{
+            width: 450px;
+            overflow:hidden;
+            text-overflow:ellipsis;
+            white-space:nowrap;
+        }
+    </style>
     <body>
         <nav class="nav nav-tabs">
             <ul class="nav navbar-nav">
@@ -120,29 +120,29 @@ function content_5d401278cc6067_33410282 (Smarty_Internal_Template $_smarty_tpl)
                 </thead>
                 <tbody id="tbody">
                     <?php
-$_from = $_smarty_tpl->smarty->ext->_foreach->init($_smarty_tpl, $_smarty_tpl->tpl_vars['arrays']->value, 'array');
+$_from = $_smarty_tpl->smarty->ext->_foreach->init($_smarty_tpl, $_smarty_tpl->tpl_vars['articleObj']->value, 'articleData');
 if ($_from !== null) {
-foreach ($_from as $_smarty_tpl->tpl_vars['array']->value) {
+foreach ($_from as $_smarty_tpl->tpl_vars['articleData']->value) {
 ?>
                     <tr>
                         <td>
-                            <?php echo $_smarty_tpl->tpl_vars['array']->value['title'];?>
+                            <?php echo $_smarty_tpl->tpl_vars['articleData']->value['title'];?>
 
                         </td>
                         <td>
-                            <?php echo $_smarty_tpl->tpl_vars['array']->value['content'];?>
+                            <?php echo $_smarty_tpl->tpl_vars['articleData']->value['content'];?>
 
                         </td>
                         <td>
-                            <?php echo $_smarty_tpl->tpl_vars['array']->value['nickname'];?>
+                            <?php echo $_smarty_tpl->tpl_vars['articleData']->value['nickName'];?>
 
                         </td>
                         <td>
-                            <?php echo $_smarty_tpl->tpl_vars['array']->value['create_date'];?>
+                            <?php echo $_smarty_tpl->tpl_vars['articleData']->value['createDate'];?>
 
                         </td>
                         <td class="col-fixed-view">
-                            <a href="article.php?id=<?php echo $_smarty_tpl->tpl_vars['array']->value['article_id'];?>
+                            <a href="article.php?id=<?php echo $_smarty_tpl->tpl_vars['articleData']->value['articleId'];?>
 " class="btn btn-info col-md-10" role="button">瀏覽</a>
                         </td>
                     </tr>

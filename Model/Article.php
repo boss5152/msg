@@ -20,13 +20,12 @@ class Article extends ConnectDb
         $value = substr($value, 0, -1);
         //執行
         $sql = "INSERT INTO Article ($field) VALUES ($value)";
-        $result = $this->execute_sql($sql);
-        $this->close_connect();
+        $result = $this->executeSql($sql);
         return $result;
     }
 
     //修改
-    public function update($array, $article_id)
+    public function update($array, $articleId)
     {
         $update = '';
         foreach($array as $key => $value){
@@ -35,18 +34,16 @@ class Article extends ConnectDb
         //-1表示去掉最後一個','
         $update = substr($update, 0, -1);
         //執行
-        $sql = "UPDATE Article set $update WHERE article_id = $article_id";
-        $result = $this->execute_sql($sql);
-        $this->close_connect();
+        $sql = "UPDATE Article set $update WHERE articleId = $articleId";
+        $result = $this->executeSql($sql);
         return $result;
     }
 
     //刪除
-    public function delete($article_id)
+    public function delete($articleId)
     {
-        $sql = "DELETE FROM Article WHERE article_id = $article_id";
-        $result = $this->execute_sql($sql);
-        $this->close_connect();
+        $sql = "DELETE FROM Article WHERE articleId = $articleId";
+        $result = $this->executeSql($sql);
         return $result;
     }
 
@@ -61,9 +58,8 @@ class Article extends ConnectDb
         $select = substr($select, 0, -5);
         //sql
         $sql = "SELECT * FROM Article WHERE $select";
-        $result = $this->execute_sql($sql);
+        $result = $this->executeSql($sql);
         $row_result = mysqli_fetch_assoc($result);
-        $this->close_connect();
         return $row_result;
     }
 
@@ -71,45 +67,52 @@ class Article extends ConnectDb
      *  index文章顯示
      *  總數
      */
-    public function show_article()
+    public function getArticleDataCount()
     {
         $sql = "SELECT * FROM 
-            (SELECT article.title,article.content,member.nickname,article.create_date,article.article_id 
-            FROM member LEFT JOIN article ON member.user_id = article.user_id GROUP BY article.article_id ) 
-            as newTable WHERE newTable.article_id IS NOT NULL";
-        $result = $this->execute_sql($sql);
+            (SELECT article.title,article.content,member.nickName,article.createDate,article.articleId 
+            FROM member LEFT JOIN article ON member.userId = article.userId GROUP BY article.articleId ) 
+            as newTable WHERE newTable.articleId IS NOT NULL";
+        $result = $this->executeSql($sql);
         $row_result = mysqli_num_rows($result);
-        $this->close_connect();
         return $row_result;
     }
 
     /*
      *  分頁
      */
-    public function show_article_page($start,$count)
+    public function showArticlePage($start,$count)
     {
         $sql = "SELECT * FROM 
-            (SELECT article.title,article.content,member.nickname,article.create_date,article.article_id 
-            FROM member LEFT JOIN article ON member.user_id = article.user_id GROUP BY article.article_id ) 
-            as newTable WHERE newTable.article_id IS NOT NULL LIMIT $start,$count";
-        $result = $this->execute_sql($sql);
+            (SELECT article.title,article.content,member.nickName,article.createDate,article.articleId 
+            FROM member LEFT JOIN article ON member.userId = article.userId GROUP BY article.articleId ) 
+            as newTable WHERE newTable.articleId IS NOT NULL LIMIT $start,$count";
+        $result = $this->executeSql($sql);
+        return $result;
+    }
+
+    /*
+     * 檢查分頁是否有資料
+     */
+    public function checkPage($start,$count)
+    {
+        $sql = "SELECT * FROM 
+            (SELECT article.title,article.content,member.nickName,article.createDate,article.articleId 
+            FROM member LEFT JOIN article ON member.userId = article.userId GROUP BY article.articleId ) 
+            as newTable WHERE newTable.articleId IS NOT NULL LIMIT $start,$count";
+        $result = $this->executeSql($sql);
         $row_result = mysqli_num_rows($result);
-        $this->close_connect();
-        $array = [
-            'result' => $result,
-            'row_result' => $row_result
-        ];
-        return $array;
+        return ($row_result === 0) ? true : false;
     }
 
     //index留言顯示
-    public function show_msg($article_id)
+    public function showMsg($articleId)
     {
-        $sql = "SELECT msg.msg_id,msg.user_id,msg.msg_name,msg.msg_content,msg.msg_date,msg.article_id 
-            FROM msg LEFT JOIN article ON article.article_id = msg.article_id 
-            WHERE msg.article_id = $article_id";
-        $result = $this->execute_sql($sql);
-        $this->close_connect();
+        $sql = "SELECT msg.msg_id,msg.userId,msg.msg_name,msg.msg_content,msg.msg_date,msg.articleId 
+            FROM msg LEFT JOIN article ON article.articleId = msg.articleId 
+            WHERE msg.articleId = $articleId";
+        $result = $this->executeSql($sql);
+        
         return $result;
     }
     
