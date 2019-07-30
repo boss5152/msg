@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>留言板</title>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.4.0/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://cdn.staticfile.org/popper.js/1.12.5/umd/popper.min.js"></script>
+        <script src="https://cdn.staticfile.org/twitter-bootstrap/3.4.0/js/bootstrap.min.js"></script>
+        <script src="http://localhost/msg/Controller/javascript/tool.js"></script>
+    </head>
+    <style>
+        th{
+            text-align: center;
+        }
+        td{
+            text-align: center;
+        }
+        .col-fixed-title {
+            width: 120px;
+        }
+        .col-fixed-content {
+            width: 450px;
+        }
+        .col-fixed-user {
+            width: 10%;
+        }
+        .col-fixed-date {
+            width: 20%;
+        }
+        .col-fixed-view {
+            width: 10%;
+        }
+        #title{
+            width: 120px;
+            overflow:hidden;
+            text-overflow:ellipsis;
+            white-space:nowrap;
+        }
+        #content{
+            width: 450px;
+            overflow:hidden;
+            text-overflow:ellipsis;
+            white-space:nowrap;
+        }
+    </style>
+    <body>
+        <nav class="nav nav-tabs">
+            <ul class="nav navbar-nav">
+                {{if isset($nickname)}}
+                    <li class="nav-item">
+                        <a class="nav-link" >{{$nickname}}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="add.php?" id="add">發文</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.php?page=1" id="index">首頁</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="logout.php?" id="logout">登出</a>
+                    </li>
+                {{else}}
+                    <li class="nav-item">
+                        <a class="nav-link" href="login.php?" id="login"><span>登入<span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="register.php?" id="register"><span>註冊<span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.php?page=1" id="index">首頁</a>
+                    </li>
+                {{/if}}
+            </ul>
+        </nav>
+        <p></p>
+        <div class="container">
+            <h2>留言板</h2>       
+            <table class="table table-hover">
+                <thead>
+                    <tr class="success">
+                        <th class="col-fixed-title">標題</th>
+                        <th class="col-fixed-content">內容</th>
+                        <th>發文者</th>
+                        <th>發表時間</th>
+                        <th class="col-fixed-view">瀏覽</th>
+                    </tr>
+                </thead>
+                <tbody id="tbody">
+                    {{foreach $arrays as $array}}
+                    <tr>
+                        <td>
+                            {{$array['title']}}
+                        </td>
+                        <td>
+                            {{$array['content']}}
+                        </td>
+                        <td>
+                            {{$array['nickname']}}
+                        </td>
+                        <td>
+                            {{$array['create_date']}}
+                        </td>
+                        <td class="col-fixed-view">
+                            <a href="article.php?id={{$array['article_id']}}" class="btn btn-info col-md-10" role="button">瀏覽</a>
+                        </td>
+                    </tr>
+                    {{/foreach}}
+                </tbody>
+            </table>
+        </div>
+        <div class="text text-center">
+            <ul class="pagination">
+                {{for $page = $firstPage to $endPage}}
+                    {{if $page == $nowPage}}
+                        <li class="active"><a href="?page={{$page}}">{{$page}}</a></li>
+                    {{else}}
+                        <li><a href="?page={{$page}}">{{$page}}</a></li>
+                    {{/if}}
+                {{/for}}
+            </ul>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,50 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.4.0/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://cdn.staticfile.org/popper.js/1.12.5/umd/popper.min.js"></script>
+        <script src="https://cdn.staticfile.org/twitter-bootstrap/3.4.0/js/bootstrap.min.js"></script>
+        <script src="http://localhost/msg/Controller/javascript/tool.js"></script>
+    </head>
+    <body>
+        <nav class="nav nav-tabs">
+            <ul class="nav navbar-nav">
+                {{if isset($nickname)}}
+                    <li class="nav-item">
+                        <a class="nav-link" >{{$nickname}}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="add.php?" id="add">發文</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.php?page=1" id="index">首頁</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="logout.php?" id="logout">登出</a>
+                    </li>
+                {{else}}
+                    <li class="nav-item">
+                        <a class="nav-link" href="login.php?" id="login"><span>登入<span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="register.php?" id="register"><span>註冊<span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.php?page=1" id="index">首頁</a>
+                    </li>
+                {{/if}}
+            </ul>
+        </nav>
+        <p></p>
+        <div class="container">
+            <div class="form-group">
+                <label for="content">內容 : </label>
+                <textarea class="form-control" rows="5" name="msg_content" id="msg_content">{{$msg_content}}</textarea>
+                <p id="msgContent"></p>
+            </div>
+                <button class="btn btn-primary" id="btnUpdateMsg" value="{{$msg_id}}">修改留言</button>
+                <a href="article.php?id={{$article_id}}" class="btn btn-danger" role="button">取消</a>
+        </div>
+    </body>
+</html>
