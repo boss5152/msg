@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.33, created on 2019-07-30 08:38:11
+/* Smarty version 3.1.33, created on 2019-07-31 06:07:25
   from 'C:\xampp\htdocs\msg\Controller\templates\login.html' */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.33',
-  'unifunc' => 'content_5d3fe5d3c3a1b4_27520297',
+  'unifunc' => 'content_5d4113fd875d73_71223631',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '511cd212997035bb81475926e504e20246d1137d' => 
     array (
       0 => 'C:\\xampp\\htdocs\\msg\\Controller\\templates\\login.html',
-      1 => 1564468691,
+      1 => 1564545668,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_5d3fe5d3c3a1b4_27520297 (Smarty_Internal_Template $_smarty_tpl) {
+function content_5d4113fd875d73_71223631 (Smarty_Internal_Template $_smarty_tpl) {
 ?><!DOCTYPE html> 
 <html> 
     <head> 
@@ -44,31 +44,15 @@ function content_5d3fe5d3c3a1b4_27520297 (Smarty_Internal_Template $_smarty_tpl)
     <body>
         <nav class="nav nav-tabs">
             <ul class="nav navbar-nav">
-                <?php if (isset($_smarty_tpl->tpl_vars['nickname']->value)) {?>
-                    <li class="nav-item">
-                        <a class="nav-link" ><?php echo $_smarty_tpl->tpl_vars['nickname']->value;?>
-</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="add.php?" id="add">發文</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.php?page=1" id="index">首頁</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="logout.php?" id="logout">登出</a>
-                    </li>
-                <?php } else { ?>
-                    <li class="nav-item">
-                        <a class="nav-link" href="login.php?" id="login"><span>登入<span></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="register.php?" id="register"><span>註冊<span></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.php?page=1" id="index">首頁</a>
-                    </li>
-                <?php }?>
+                <li class="nav-item">
+                    <a class="nav-link" href="login.php?" id="login"><span>登入<span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="register.php?" id="register"><span>註冊<span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="index.php?page=1" id="index">首頁</a>
+                </li>
             </ul>
         </nav>
         <div class="container">

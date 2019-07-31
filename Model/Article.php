@@ -21,7 +21,7 @@ class Article extends ConnectDb
         //執行
         $sql = "INSERT INTO Article ($field) VALUES ($value)";
         $result = $this->executeSql($sql);
-        return $result;
+        return ($result === true) ? true : false ;
     }
 
     //修改
@@ -44,23 +44,28 @@ class Article extends ConnectDb
     {
         $sql = "DELETE FROM Article WHERE articleId = $articleId";
         $result = $this->executeSql($sql);
-        return $result;
+        return ($result === true) ? true : false;
     }
 
     //查詢
-    public function getAll($array)
+    public function getAll($articleId)
     {
-        $select = '';
-        foreach ($array as $key => $value) {
-            //key = value
-            $select .= $key . "='" . $value . "' AND ";
-        }
-        $select = substr($select, 0, -5);
-        //sql
-        $sql = "SELECT * FROM Article WHERE $select";
+        $sql = "SELECT * FROM Article WHERE articleId = $articleId";
         $result = $this->executeSql($sql);
         $row_result = mysqli_fetch_assoc($result);
         return $row_result;
+    }
+
+    /**
+     * 檢查文章
+     */
+    //查詢
+    public function checkArticle($articleId)
+    {
+        $sql = "SELECT articleId FROM Article WHERE articleId = $articleId";
+        $result = $this->executeSql($sql);
+        $row_result = mysqli_num_rows($result);
+        return ($row_result === 0) ? false : true;
     }
 
     /*
@@ -102,17 +107,16 @@ class Article extends ConnectDb
             as newTable WHERE newTable.articleId IS NOT NULL LIMIT $start,$count";
         $result = $this->executeSql($sql);
         $row_result = mysqli_num_rows($result);
-        return ($row_result === 0) ? true : false;
+        return ($row_result === 0) ? false : true;
     }
 
     //index留言顯示
     public function showMsg($articleId)
     {
-        $sql = "SELECT msg.msg_id,msg.userId,msg.msg_name,msg.msg_content,msg.msg_date,msg.articleId 
+        $sql = "SELECT msg.msgId,msg.msgName,msg.userId,msg.msgContent,msg.msgDate,msg.articleId 
             FROM msg LEFT JOIN article ON article.articleId = msg.articleId 
             WHERE msg.articleId = $articleId";
         $result = $this->executeSql($sql);
-        
         return $result;
     }
     

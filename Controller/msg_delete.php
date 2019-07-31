@@ -4,24 +4,20 @@ require_once('../Model/Message.php');
 require_once('../Model/Member.php');
 require_once('smarty.php');
 
-##驗證登入
-if (isset($_COOKIE['token'])) {
+$useMemberTb = new Member();
+$useMessageTb = new Message();
 
-    $array = [
-        'token' => $_COOKIE['token'],
-        'user_id' => $_COOKIE['user_id'],
-        'nickname' => $_COOKIE['nickname']
-    ];
-    
-    $user = new Member();
-    $result = $user->check($array);
-    if ($result === 1) {
-        $smarty->assign('nickname', $_COOKIE['nickname']);
+## 驗證登入
+if (isset($_COOKIE['token'])) {
+    $token = $_COOKIE['token'];
+    $isCheck = $useMemberTb->checkToken($token);
+    if ($isCheck === true) {
+        ## 取資料用於顯示meun暱稱
+        $memberData = $useMemberTb->getAll($token);
+        $nowUserId = $memberData['userId'];
     } else {
-        setcookie("nickname", "", time()-3600);
-        setcookie("token", "", time()-3600);
-        setcookie("user_id", "", time()-3600);
-        header("Location: index.php");
+        ## 檢查不正確，強制登出
+        header("Location: logout.php");
         exit;
     }
 } else {
@@ -29,25 +25,29 @@ if (isset($_COOKIE['token'])) {
     exit;
 }
 
-$msg_id = $_POST['msg_id'];
-
-##先紀錄要返回的文章ID
-$user = new Message();
-
+## 先紀錄要返回的文章ID
+$msgId = $_POST['msgId'];
 $array = [
-    'msg_id' => $msg_id
+    'msgId' => $msgId
 ];
+$messageData = $useMessageTb->getAll($array);
+## 再砍掉
+$checkDelete = $useMessageTb->delete($msgId);
+## 告知使用者刪除有無成功
+if ($checkDelete === true) {
+    $tips = "刪除成功";
+    echo json_encode(array(
+        'isDeleteMsg' => true,
+        'articleId' => $messageData['articleId'],
+        'msgId' => $msgId,
+        'tips' => $tips
+    ));
+} else {
+    $tips = "刪除失敗";
+    echo json_encode(array(
+        'isDeleteMsg' => false,
+        'articleId' => $messageData['articleId'],
+        'tips' => $tips
+    ));
+}
 
-$row_result = $user->getAll($array);
-
-##再砍掉
-$user = new Message();
-$user->delete($msg_id);
-
-$tips = "刪除成功";
-echo json_encode(array(
-    'isDeleteMsg' => true,
-    'article_id' => $row_result['article_id'],
-    'msg_id' => $msg_id,
-    'tips' => $tips
-));

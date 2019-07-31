@@ -3,11 +3,11 @@
  */
 $(document).ready(function(){
     //暱稱
-    $("#nickname").keyup(function(){
-        var stringNickname = $("#nickname").val();
-        ((stringNickname.length > 5) || (stringNickname.length < 1) || (/[^A-Za-z0-9]/.test(stringNickname)))
-         ? errorNickname()
-         : $("#msgNickname").html("");
+    $("#nickName").keyup(function(){
+        var stringNickName = $("#nickName").val();
+        ((stringNickName.length > 5) || (stringNickName.length < 1) || (/[^A-Za-z0-9]/.test(stringNickName)))
+         ? errorNickName()
+         : $("#msgNickName").html("");
         btnCanClick();
     });
     //帳號
@@ -43,19 +43,18 @@ $(document).ready(function(){
         btnCanClick();
     });
     //留言內容
-    $("#msg_content").keyup(function(){
-        var stringMsgContent = $("#msg_content").val();
+    $("#msgContent").keyup(function(){
+        var stringMsgContent = $("#msgContent").val();
         ((stringMsgContent.length > 15) || (stringMsgContent.length < 1) )
             ? errorMsgContent(stringMsgContent.length)
             : correctMsgContent(stringMsgContent.length);
-        btnCanClick();
     });
 });
 
 //暱稱驗證
 //沒過
-function errorNickname(){
-    $("#msgNickname").html("暱稱需介於一到五字且不可有空白等特殊字元");
+function errorNickName(){
+    $("#msgNickName").html("暱稱需介於一到五字且不可有空白等特殊字元");
     $("#btnRegister").attr('disabled', true);
 }
 
@@ -98,24 +97,24 @@ function correctContent(contentLength){
 //留言內容驗證
 //沒過
 function errorMsgContent(msgContentLength){
-    $("#msgContent").html("內容需介於1到15字，您現在長度為" + msgContentLength + "字");
+    $("#msgContentTips").html("內容需介於1到15字，您現在長度為" + msgContentLength + "字");
     $("#btnAddMsg").attr('disabled', true);
     $("#btnUpdateMsg").attr('disabled', true);
 }
 //有過
 function correctMsgContent(msgContentLength){
-    $("#msgContent").html("您現在長度為" + msgContentLength + "字");
+    $("#msgContentTips").html("您現在長度為" + msgContentLength + "字");
     $("#btnAddMsg").attr('disabled', false);
     $("#btnUpdateMsg").attr('disabled', false);
 }
 
 function btnCanClick(){
-    var msgNickname = $("#msgNickname").html();
+    var msgNickName = $("#msgNickName").html();
     var msgAccount = $("#msgAccount").html();
     var msgPassword = $("#msgPassword").html();
     var stringTitle = $("#title").val();
     var stringContent = $("#content").val();
-    if ((msgNickname === "") && (msgAccount === "") && (msgPassword === "")) {
+    if ((msgNickName === "") && (msgAccount === "") && (msgPassword === "")) {
         $("#btnRegister").attr('disabled', false);
     }
     if ((msgAccount === "") && (msgPassword === "")) {
@@ -135,7 +134,7 @@ function btnCanClick(){
  */
 $(document).ready(function() {
     $("#btnRegister").click(function() {
-        var nickname = $("#nickname").val();
+        var nickName = $("#nickName").val();
         var account = $("#account").val();
         var password = $("#password").val();
         $.ajax({
@@ -143,7 +142,7 @@ $(document).ready(function() {
             url: "http://localhost/msg/Controller/register.php",
             dataType: "json",
             data: {
-                'nickname' : nickname,
+                'nickName' : nickName,
                 'account' : account, 
                 'password' : password 
             },
@@ -180,10 +179,10 @@ $(document).ready(function() {
             },
             success: function(data) {
                 if (data.isLogin === true){
-                    alert("登入成功");
+                    alert(data.tips);
                     self.location = "index.php";
                 } else {
-                    alert("帳號密碼錯誤");
+                    alert(data.tips);
                 }
             },
             error: function() {
@@ -228,13 +227,13 @@ $(document).ready(function() {
  */
 $(document).ready(function() {
     $("#btnDeleteArt").click(function() {
-        var article_id = $("#btnDeleteArt").val();
+        var articleId = $("#btnDeleteArt").val();
         $.ajax({
             type: "POST",
             url: "http://localhost/msg/Controller/delete.php",
             dataType: "json",
             data: {
-                'article_id': article_id
+                'articleId': articleId
             },
             success: function(data) {
                 if (data.isDelete === true){
@@ -256,7 +255,7 @@ $(document).ready(function() {
  */
 $(document).ready(function() {
     $("#btnUpdateArt").click(function() {
-        var article_id = $("#btnUpdateArt").val();
+        var articleId = $("#btnUpdateArt").val();
         var title = $("#title").val();
         var content = $("#content").val();
         $.ajax({
@@ -266,12 +265,12 @@ $(document).ready(function() {
             data: {
                 'title': title,
                 'content': content,
-                'article_id': article_id
+                'articleId': articleId
             },
             success: function(data) {
                 if (data.isUpdate === true){
                     alert(data.tips);
-                    self.location = "article.php?id=" + data.article_id;
+                    self.location = "article.php?id=" + data.articleId;
                 } else {
                     alert(data.tips);
                 }
@@ -288,20 +287,20 @@ $(document).ready(function() {
  */
 $(document).ready(function() {
     $("#btnAddMsg").click(function() {
-        var msg_content = $("#msg_content").val();
-        var article_id = $("#btnAddMsg").val();
+        var msgContent = $("#msgContent").val();
+        var articleId = $("#btnAddMsg").val();
         $.ajax({
             type: "POST",
             url: "http://localhost/msg/Controller/msg_add.php",
             dataType: "json",
             data: {
-                'article_id' : article_id,
-                'msg_content' : msg_content
+                'articleId' : articleId,
+                'msgContent' : msgContent
             },
             success: function(data) {
                 if (data.isAddMsg === true){
                     alert(data.tips);
-                    self.location = "article.php?id=" + data.article_id;
+                    self.location = "article.php?id=" + data.articleId;
                 } else {
                     alert(data.tips);
                 }
@@ -318,20 +317,20 @@ $(document).ready(function() {
  */
 $(document).ready(function() {
     $("#btnUpdateMsg").click(function() {
-        var msg_content = $("#msg_content").val();
-        var msg_id = $("#btnUpdateMsg").val();
+        var msgContent = $("#msgContent").val();
+        var msgId = $("#btnUpdateMsg").val();
         $.ajax({
             type: "POST",
             url: "http://localhost/msg/Controller/msg_update.php",
             dataType: "json",
             data: {
-                'msg_id' : msg_id,
-                'msg_content' : msg_content
+                'msgId' : msgId,
+                'msgContent' : msgContent
             },
             success: function(data) {
                 if (data.isUpdateMsg === true){
                     alert(data.tips);
-                    self.location = "article.php?id=" + data.article_id;
+                    self.location = "article.php?id=" + data.articleId;
                 } else {
                     alert(data.tips);
                 }
@@ -348,18 +347,18 @@ $(document).ready(function() {
  */
 $(document).ready(function() {
     $("#btnDeleteMsg").click(function() {
-        var msg_id = $("#btnDeleteMsg").val();
+        var msgId = $("#btnDeleteMsg").val();
         $.ajax({
             type: "POST",
             url: "http://localhost/msg/Controller/msg_delete.php",
             dataType: "json",
             data: {
-                'msg_id' : msg_id,
+                'msgId' : msgId,
             },
             success: function(data) {
                 if (data.isDeleteMsg === true){
                     alert(data.tips);
-                    $("#" + data.msg_id).remove();
+                    $("#" + data.msgId).remove();
                 } else {
                     alert(data.tips);
                 }

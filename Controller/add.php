@@ -4,24 +4,20 @@ require_once('../Model/Article.php');
 require_once('../Model/Member.php');
 require_once('smarty.php');
 
-##驗證登入
-if (isset($_COOKIE['token'])) {
+$useMemberTb = new Member();
+$useArticleTb = new Article();
 
-    $array = [
-        'token' => $_COOKIE['token'],
-        'user_id' => $_COOKIE['user_id'],
-        'nickname' => $_COOKIE['nickname']
-    ];
-    
-    $user = new Member();
-    $result = $user->check($array);
-    if ($result === 1) {
-        $smarty->assign('nickname', $_COOKIE['nickname']);
+## 驗證登入
+if (isset($_COOKIE['token'])) {
+    $token = $_COOKIE['token'];
+    $isCheck = $useMemberTb->checkToken($token);
+    if ($isCheck === true) {
+        ## 取資料用於顯示meun暱稱
+        $memberData = $useMemberTb->getAll($token);
+        $nowUserId = $memberData['userId'];
     } else {
-        setcookie("nickname", "", time()-3600);
-        setcookie("token", "", time()-3600);
-        setcookie("user_id", "", time()-3600);
-        header("Location: index.php");
+        ## 檢查不正確，強制登出
+        header("Location: logout.php");
         exit;
     }
 } else {
@@ -30,10 +26,10 @@ if (isset($_COOKIE['token'])) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
-    ##檢查是否有空
+    ## 檢查是否有空
     $tips = "";
     if (!empty($_POST["title"]) && (!empty($_POST["content"]))) {
-        ##檢查長度
+        ## 檢查長度
         $title = $_POST["title"];
         $content = $_POST["content"];
         if (mb_strlen($title, "utf-8") > 15) {
@@ -41,23 +37,17 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         } elseif (mb_strlen($content, "utf-8") > 100) {
             $tips .= "內容不可超過100字，您的內容為" . mb_strlen($content, "utf-8") . "字";
         } elseif ($tips === '') {
-            ##防注入
+            ## 防注入
             $title = htmlentities($title, ENT_NOQUOTES, "UTF-8");
             $content = htmlentities($content, ENT_NOQUOTES, "UTF-8");
-            ##把ID裝入
-            $user_id = $_COOKIE['user_id'];
-
-            $array = [
+            $insertArray = [
                 'title' => $title, 
                 'content' => $content, 
-                'user_id' => $user_id
+                'userId' => $nowUserId
             ];
-            
-            $user = new Article();
-            $result = $user->insert($array);
-            
-            ##回傳
-            if ($result === true) {
+            $isInsert = $useArticleTb->insert($insertArray);
+            ## 回傳
+            if ($isInsert === true) {
                 $tips = "發文成功";
                 echo json_encode(array(
                     'isAdd' => true,
@@ -80,5 +70,8 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         ));
     }
 } else {
+    if (isset($memberData)) {
+        $smarty->assign('nickName', $memberData['nickName']);
+    }
     $smarty->display("add.html"); 
 }

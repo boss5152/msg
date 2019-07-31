@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.33, created on 2019-07-30 08:37:18
+/* Smarty version 3.1.33, created on 2019-07-31 05:50:36
   from 'C:\xampp\htdocs\msg\Controller\templates\register.html' */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.33',
-  'unifunc' => 'content_5d3fe59e1a10a9_96644490',
+  'unifunc' => 'content_5d41100c0d48e4_27572455',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'a1eaaa2f80671e593537b20d22b4e80698a27b48' => 
     array (
       0 => 'C:\\xampp\\htdocs\\msg\\Controller\\templates\\register.html',
-      1 => 1564468637,
+      1 => 1564545035,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_5d3fe59e1a10a9_96644490 (Smarty_Internal_Template $_smarty_tpl) {
+function content_5d41100c0d48e4_27572455 (Smarty_Internal_Template $_smarty_tpl) {
 ?><html>
     <head>
         <meta charset="UTF-8"/>
@@ -42,39 +42,23 @@ function content_5d3fe59e1a10a9_96644490 (Smarty_Internal_Template $_smarty_tpl)
     <body>
         <nav class="nav nav-tabs">
             <ul class="nav navbar-nav">
-                <?php if (isset($_smarty_tpl->tpl_vars['nickname']->value)) {?>
-                    <li class="nav-item">
-                        <a class="nav-link" ><?php echo $_smarty_tpl->tpl_vars['nickname']->value;?>
-</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="add.php?" id="add">發文</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.php?page=1" id="index">首頁</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="logout.php?" id="logout">登出</a>
-                    </li>
-                <?php } else { ?>
-                    <li class="nav-item">
-                        <a class="nav-link" href="login.php?" id="login"><span>登入<span></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="register.php?" id="register"><span>註冊<span></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.php?page=1" id="index">首頁</a>
-                    </li>
-                <?php }?>
+                <li class="nav-item">
+                    <a class="nav-link" href="login.php?" id="login"><span>登入<span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="register.php?" id="register"><span>註冊<span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="index.php?page=1" id="index">首頁</a>
+                </li>
             </ul>
         </nav>
         <p></p>
         <div class="container col-md-4 col-md-offset-4">
                 <div class="form-group">
                     <label>您的暱稱 : </label>
-                    <input type="text" class="form-control" name="nickname" id="nickname" placeholder="中英數上限5字">
-                    <p id="msgNickname">暱稱需介於一到五字且不可有空白等特殊字元</p>
+                    <input type="text" class="form-control" name="nickName" id="nickName" placeholder="中英數上限5字">
+                    <p id="msgNickName">暱稱需介於一到五字且不可有空白等特殊字元</p>
                 </div>
                 <div class="form-group">
                     <label for="account">帳號 : </label>

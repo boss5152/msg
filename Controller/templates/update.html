@@ -17,9 +17,9 @@
     <body>
         <nav class="nav nav-tabs">
             <ul class="nav navbar-nav">
-                {{if isset($nickname)}}
+                {{if isset($nickName)}}
                     <li class="nav-item">
-                        <a class="nav-link" >{{$nickname}}</a>
+                        <a class="nav-link" >{{$nickName}}</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="add.php?" id="add">發文</a>
@@ -55,12 +55,12 @@
                     <label>內容 : </label>
                     <textarea type="textarea" class="form-control" 
                         name="content" id="content">{{$content}}</textarea>
-                    <input type="hidden" name="article_id" value="{{$article_id}}">
-                    <p id="msgContent"></p>
+                    <input type="hidden" name="articleId" value="{{$articleId}}">
+                    <p id="msgContent">內容需介於1到15字</p>
                 </div>
                 <div class="form-group">
-                    <button type="button" class="btn btn-primary offset-sm-3" id="btnUpdateArt" value="{{$article_id}}">確定</button>
-                    <a href="article.php?id={{$article_id}}" class="btn btn-danger offset-sm-2" role="button">取消</a>
+                    <button type="button" class="btn btn-primary offset-sm-3" id="btnUpdateArt" value="{{$articleId}}">確定</button>
+                    <a href="article.php?id={{$articleId}}" class="btn btn-danger offset-sm-2" role="button">取消</a>
                 </div>
         </div>
     </body>

@@ -4,25 +4,20 @@ require_once('../Model/Message.php');
 require_once('../Model/Member.php');
 require_once('smarty.php');
 
-##驗證登入
-if (isset($_COOKIE['token'])) {
+$useMemberTb = new Member();
+$useMessageTb = new Message();
 
-    $array = [
-        'token' => $_COOKIE['token'],
-        'user_id' => $_COOKIE['user_id'],
-        'nickname' => $_COOKIE['nickname']
-    ];
-    
-    $user = new Member();
-    $result = $user->check($array);
-    
-    if ($result === 1) {
-        $smarty->assign('nickname', $_COOKIE['nickname']);
+## 驗證登入
+if (isset($_COOKIE['token'])) {
+    $token = $_COOKIE['token'];
+    $isCheck = $useMemberTb->checkToken($token);
+    if ($isCheck === true) {
+        ## 取資料用於顯示meun暱稱
+        $memberData = $useMemberTb->getAll($token);
+        $nowUserId = $memberData['userId'];
     } else {
-        setcookie("nickname", "", time()-3600);
-        setcookie("token", "", time()-3600);
-        setcookie("user_id", "", time()-3600);
-        header("Location: index.php");
+        ## 檢查不正確，強制登出
+        header("Location: logout.php");
         exit;
     }
 } else {
@@ -31,62 +26,60 @@ if (isset($_COOKIE['token'])) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
-    $msg_content = $_POST['msg_content'];
+    $msgContent = $_POST['msgContent'];
     $tips = '';
-    if (mb_strlen($msg_content, "utf-8") > 15) {
-        $tips .= "內容不可超過15字，您的內容為" . mb_strlen($msg_content, "utf-8") . "字";
+    if (mb_strlen($msgContent, "utf-8") > 15) {
+        $tips .= "內容不可超過15字，您的內容為" . mb_strlen($msgContent, "utf-8") . "字";
     } elseif ($tips === '') {
-        ##修改
-        $msg_id = $_POST['msg_id'];
-        $msg_content = $_POST['msg_content'];
-        $msg_content = htmlentities($msg_content, ENT_NOQUOTES, "UTF-8");
-
+        ## 修改
+        $msgId = $_POST['msgId'];
+        $msgContent = $_POST['msgContent'];
+        $msgContent = htmlentities($msgContent, ENT_NOQUOTES, "UTF-8");
         $array = [
-            'msg_content' => $msg_content
+            'msgContent' => $msgContent
         ];
+        $useMessageTb->update($array, $msgId);
 
-        $user = new Message();
-        $user->update($array, $msg_id);
+        ## 返回留言對應之文章用
+        $messageData = $useMessageTb->getAll($array);
 
-        ##返回留言對應之文章用
-        $user = new Message();
-        $row_result = $user->getAll($array);
-
-        ##給使用者訊息
+        ## 給使用者訊息
         $tips = "留言編輯成功";
 
         echo json_encode(array(
             'isUpdateMsg' => true,
-            'article_id' => $row_result['article_id'],
+            'articleId' => $messageData['articleId'],
             'tips' => $tips
         ));
     }
 
 } else {
-    ##顯示
-    $msg_id = $_GET['id'];
-    $user_id = $_COOKIE['user_id'];
-
+    ## 顯示
+    ## 文章頁面防呆
+    if (($_SERVER['QUERY_STRING'] === "") || (!is_numeric($_GET['id'])) || ($_GET['id'] < 1)) {
+        header("Location: index.php");
+    } else {
+        $msgId = $_GET['id'];
+    }
+    ##防止有人亂打出現錯誤
     $array = [
-        'msg_id' => $msg_id,
-        'user_id' => $user_id
+        'msgId' => $msgId,
     ];
-    
-    $user = new Message();
-    $row_result = $user->getAll($array);
-
-     ##防止有人亂打出現錯誤
-     if ($row_result === NULL) {
+    $messageData = $useMessageTb->getAll($array);
+    $checkMsg = $useMessageTb->checkMsg($msgId);
+    if ($checkMsg === false) {
         header("Location: index.php");
     }
 
-    $msg_content = $row_result['msg_content'];
-    $msg_id = $row_result['msg_id'];
-    $article_id = $row_result['article_id'];
+    $msgContent = $messageData['msgContent'];
+    $msgId = $messageData['msgId'];
+    $articleId = $messageData['articleId'];
 
-    $smarty->assign("msg_content", $msg_content);
-    $smarty->assign("msg_id", $msg_id);
-    $smarty->assign("article_id", $row_result['article_id']);
+    if (isset($memberData)) {
+        $smarty->assign('nickName', $memberData['nickName']);
+    }
+    $smarty->assign("msgContent", $msgContent);
+    $smarty->assign("msgId", $msgId);
+    $smarty->assign("articleId", $articleId);
     $smarty->display("msg_update.html"); 
-
 }

@@ -5,23 +5,19 @@ require_once('../Model/Article.php');
 require_once('../Model/Member.php');
 require_once('smarty.php');
 
-##驗證登入
-if (isset($_COOKIE['token'])) {
+$useMemberTb = new Member();
+$useArticleTb = new Article();
+$useMessageTb = new Message();
 
-    $array = [
-        'token' => $_COOKIE['token'],
-        'user_id' => $_COOKIE['user_id'],
-        'nickname' => $_COOKIE['nickname']
-    ];
-    
-    $user = new Member();
-    $result = $user->check($array);
-    if ($result === 1) {
-        $smarty->assign('nickname', $_COOKIE['nickname']);
+## 驗證登入
+if (isset($_COOKIE['token'])) {
+    $token = $_COOKIE['token'];
+    $isCheck = $useMemberTb->checkToken($token);
+    if ($isCheck === true) {
+        ##取資料用於顯示meun暱稱
+        $memberData = $useMemberTb->getAll($token);
+        $nowUserId = $memberData['userId'];
     } else {
-        setcookie("nickname", "", time()-3600);
-        setcookie("token", "", time()-3600);
-        setcookie("user_id", "", time()-3600);
         header("Location: index.php");
         exit;
     }
@@ -31,18 +27,21 @@ if (isset($_COOKIE['token'])) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
-    
-    $article_id = $_POST['article_id'];
+    $articleId = $_POST["articleId"];
+    $checkDelete = $useArticleTb->delete($articleId);
+    if ($checkDelete === true) {
+        $useMessageTb->deleteArticle($articleId);
+        $tips = "刪除成功";
+        echo json_encode(array(
+            'isDelete' => true,
+            'tips' => $tips
+        ));
+    } else {
+        $tips = "刪除失敗";
+        echo json_encode(array(
+            'isDelete' => false,
+            'tips' => $tips
+        ));
+    }
 
-    $user = new Article();
-    $user->delete($article_id);
-
-    $user = new Message();
-    $user->delete_article($article_id);
-
-    $tips = "刪除成功";
-    echo json_encode(array(
-        'isDelete' => true,
-        'tips' => $tips
-    ));
 }

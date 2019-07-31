@@ -4,56 +4,42 @@ require_once('../Model/Article.php');
 require_once('../Model/Member.php');
 require_once('smarty.php');
 
-##驗證登入
-if (isset($_COOKIE['token'])) {
+$useArticleTb = new Article();
+$useMemberTb = new Member();
 
-    $array = [
-        'token' => $_COOKIE['token'],
-        'user_id' => $_COOKIE['user_id'],
-        'nickname' => $_COOKIE['nickname']
-    ];
-    
-    $user = new Member();
-    $result = $user->check($array);
-    if ($result === 1) {
-        $smarty->assign('nickname', $_COOKIE['nickname']);
+## 驗證登入
+if (isset($_COOKIE['token'])) {
+    $token = $_COOKIE['token'];
+    $isCheck = $useMemberTb->checkToken($token);
+    if ($isCheck === true) {
+        ##取資料用於顯示meun暱稱
+        $memberData = $useMemberTb->getAll($token);
     }
 }
 
-##顯示文章
-$article_id = $_GET['id'];
+## 文章頁面防呆
+if (($_SERVER['QUERY_STRING'] === "") || (!is_numeric($_GET['id'])) || ($_GET['id'] < 1)) {
+    header("Location: index.php");
+} else {
+    $articleId = $_GET['id'];
+}
 
-$user = new Article();
-$array = [
-    'article_id' => $article_id
-];
-
-$row_result = $user->getAll($array);
-
+$articleId = $_GET['id'];
+$checkArticle = $useArticleTb->checkArticle($articleId);
 ##防止有人亂打出現錯誤
-if ($row_result === NULL) {
+if ($checkArticle === false) {
     header("Location: index.php");
 }
+## 取得文章資料
+$articleData = $useArticleTb->getAll($articleId);
 
-$smarty->assign('array_article', $row_result);
+## 取得留言(物件)
+$msgDataObj = $useArticleTb->showMsg($articleId);
 
-##留言部分
-$user = new Article();
-$result = $user->show_msg($article_id);
-
-$smarty->assign('arrays_msg',$result);
-
-##user_id，給留言的修改刪除用
-if (isset($_COOKIE['user_id'])) {
-    $array = [
-        "user_id" => $_COOKIE['user_id'],
-        "nickname" => $_COOKIE['nickname'],
-        "article_id" => $article_id
-    ];
-
-    foreach ($array as $k => $v) {
-        $smarty->assign($k, $v);
-    }
+if (isset($memberData)) {
+    $smarty->assign('nickName', $memberData['nickName']);
 }
-
+$smarty->assign('nowUserId', $memberData['userId']);
+$smarty->assign('msgDataObj',$msgDataObj);
+$smarty->assign('articleData', $articleData);
 $smarty->display("article.html"); 

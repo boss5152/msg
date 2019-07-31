@@ -27,22 +27,22 @@ class Member extends ConnectDb
     }
 
     /*
-     * 檢查申請的帳號有無重複
+     * 檢查申請的暱稱有無重複
      */
-    public function checkAccount($account)
+    public function checkNickName($nickName)
     {
-        $sql = "SELECT userId FROM Member WHERE $account";
+        $sql = "SELECT userId FROM Member WHERE nickName = " . $nickName;
         $result = $this->executeSql($sql);
         $row_result = mysqli_num_rows($result);
         return ($row_result === 1) ? true : false;
     }
 
     /*
-     * 檢查申請的暱稱有無重複
+     * 檢查申請的帳號有無重複
      */
-    public function checkNickName($nickName)
+    public function checkAccount($account)
     {
-        $sql = "SELECT userId FROM Member WHERE $nickName";
+        $sql = "SELECT userId FROM Member WHERE account = " . $account;
         $result = $this->executeSql($sql);
         $row_result = mysqli_num_rows($result);
         return ($row_result === 1) ? true : false;
@@ -62,6 +62,7 @@ class Member extends ConnectDb
     /*
      * 取資料
      * 用於顯示於html讓使用者知道自己名稱
+     * 用於登入時給資料讓token存進對應user
      */
     public function getAll($token){
         $sql = "SELECT * FROM Member WHERE token = " . $token;
@@ -71,39 +72,41 @@ class Member extends ConnectDb
     }
     
     /*
-     * 登入
+     * 檢查登入
      */
-    public function login($array)
-    {
-        $field = '';
-        $value = '';
-        foreach ($array as $key => $v) {
-            $field .= $key . ",";
-            $value .= "'" . $v . "',";
+    public function checkLogin($array){
+        $check = '';
+        foreach ($array as $key => $value) {
+            $check .= $key . "='" . $value . "' AND ";
         }
-        $field = substr($field, 0, -1);
-        $value = substr($value, 0, -1);
-        $sql = "SELECT * FROM Member WHERE ($field) = ($value)";
-        //回傳結果
+        $check = substr($check, 0, -5);
+        $sql = "SELECT userId FROM Member WHERE $check";
         $result = $this->executeSql($sql);
-        //判斷
-        $row_result = mysqli_fetch_assoc($result);
-        return $row_result;
+        $row_result = mysqli_num_rows($result);
+        return ($row_result === 0) ? true : false ;
     }
 
     /*
-     * 修改
+     * 存token
      */
-    public function update($array, $userId)
+    public function saveToken($token, $array)
     {
         $update = '';
         foreach($array as $key => $value){
-            $update .= $key . "='" . $value . "',";
+            $update .= $key . "='" . $value . "' AND ";
         }
-        //-1表示去掉最後一個','
-        $update = substr($update, 0, -1);
+        $update = substr($update, 0, -5);
         //執行
-        $sql = "UPDATE member set $update WHERE userId = $userId";
+        $sql = "UPDATE member set token = $token WHERE $update";
+        $result = $this->executeSql($sql);
+        return $result;
+    }
+
+    /**
+     * 登出
+     */
+    public function logout($token){
+        $sql = "UPDATE member set token = 0 WHERE token = $token";
         $result = $this->executeSql($sql);
         return $result;
     }

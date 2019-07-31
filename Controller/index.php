@@ -10,21 +10,21 @@ $useArticleTb = new Article();
 ## 驗證登入
 if (isset($_COOKIE['token'])) {
     $token = $_COOKIE['token'];
-    $token = 123;
     $isCheck = $useMemberTb->checkToken($token);
     if ($isCheck === true) {
+        ##取資料用於顯示meun暱稱
         $memberData = $useMemberTb->getAll($token);
     }
 }
 
-$memberData = $useMemberTb->getAll(123);
-
-##因ajax關係，須給他page值
-// if ($_SERVER['QUERY_STRING'] === "") {
-//     $page = 1;
-// } elseif (!is_numeric($_GET['page'])) {
-//     $page = 1;
-// }
+##因ajax關係，須給他page值，順便防呆
+if ($_SERVER['QUERY_STRING'] === "") {
+    $page = 1;
+} elseif ((!is_numeric($_GET['page'])) || ($_GET['page'] < 1)) {
+    $page = 1;
+} else {
+    $page = $_GET['page'];
+}
 
 ## 從start筆開始，往後五筆
 $start = ($page - 1) * 5;
@@ -34,7 +34,7 @@ $count = 5;
 $checkPage = $useArticleTb->checkPage($start, $count);
 ## 沒有則導回首頁page1
 if ($checkPage === false) {
-    header("Location: index.php?page=1");
+    $page = 1;
 }
 
 ## 取得主資料有幾筆
@@ -63,14 +63,16 @@ if ($PageTotals > 5) {
         }
     }
 } else {
-    ##總頁數小於五，就顯示總數分頁
+    ## 總頁數小於五，就顯示總數分頁
     $firstPage = 1;
     $endPage = $PageTotals;
 }
-
-$articleObj = $useArticleTb->showArticlePage($start,$count);
-
-
+## 查找該分頁資料
+$articleObj = $useArticleTb->showArticlePage($start, $count);
+## smarty部分
+if (isset($memberData)) {
+    $smarty->assign('nickName', $memberData['nickName']);
+}
 $smarty->assign('firstPage', $firstPage);
 $smarty->assign('endPage', $PageTotals);
 $smarty->assign('nowPage', $page);

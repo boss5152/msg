@@ -11,38 +11,23 @@
     <body>
         <nav class="nav nav-tabs">
             <ul class="nav navbar-nav">
-                {{if isset($nickname)}}
-                    <li class="nav-item">
-                        <a class="nav-link" >{{$nickname}}</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="add.php?" id="add">發文</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.php?page=1" id="index">首頁</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="logout.php?" id="logout">登出</a>
-                    </li>
-                {{else}}
-                    <li class="nav-item">
-                        <a class="nav-link" href="login.php?" id="login"><span>登入<span></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="register.php?" id="register"><span>註冊<span></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.php?page=1" id="index">首頁</a>
-                    </li>
-                {{/if}}
+                <li class="nav-item">
+                    <a class="nav-link" href="login.php?" id="login"><span>登入<span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="register.php?" id="register"><span>註冊<span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="index.php?page=1" id="index">首頁</a>
+                </li>
             </ul>
         </nav>
         <p></p>
         <div class="container col-md-4 col-md-offset-4">
                 <div class="form-group">
                     <label>您的暱稱 : </label>
-                    <input type="text" class="form-control" name="nickname" id="nickname" placeholder="中英數上限5字">
-                    <p id="msgNickname">暱稱需介於一到五字且不可有空白等特殊字元</p>
+                    <input type="text" class="form-control" name="nickName" id="nickName" placeholder="中英數上限5字">
+                    <p id="msgNickName">暱稱需介於一到五字且不可有空白等特殊字元</p>
                 </div>
                 <div class="form-group">
                     <label for="account">帳號 : </label>

@@ -19,9 +19,9 @@
     <body>
         <nav class="nav nav-tabs">
             <ul class="nav navbar-nav">
-                {{if isset($nickname)}}
+                {{if isset($nickName)}}
                     <li class="nav-item">
-                        <a class="nav-link" >{{$nickname}}</a>
+                        <a class="nav-link" >{{$nickName}}</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="add.php?" id="add">發文</a>
@@ -53,43 +53,43 @@
                     <td class="active">標題</td>
                 </tr>
                 <tr>
-                    <td>{{$array_article['title']}}</td>
+                    <td>{{$articleData['title']}}</td>
                 </tr>
                 <tr>
                     <td class="active">內容</td>
                 </tr>
                 <tr>
-                    <td id="art_content">{{$array_article['content']}}</td>
+                    <td id="art_content">{{$articleData['content']}}</td>
                 </tr>
             </table>
         </div>
     </div>
     <div class="container">
-        {{if isset($nickname) }}
-            <a href="msg_add.php?id={{$article_id}}" class="btn btn-success col-sm-0.5" role="button">回覆</a>
-            {{if $array_article['user_id'] == $user_id}}
-                <a href="update.php?id={{$article_id}}" class="btn btn-primary col-sm-0.5" role="button">編輯</a>
-                <button class="btn btn-danger offset-sm-4" type="button" id="btnDeleteArt" value="{{$array_article['article_id']}}">刪除</button>
+        {{if isset($nickName) }}
+            <a href="msg_add.php?id={{$articleData['articleId']}}" class="btn btn-success col-sm-0.5" role="button">回覆</a>
+            {{if $articleData['userId'] == $nowUserId}}
+                <a href="update.php?id={{$articleData['articleId']}}" class="btn btn-primary col-sm-0.5" role="button">編輯</a>
+                <button class="btn btn-danger offset-sm-4" type="button" id="btnDeleteArt" value="{{$articleData['articleId']}}">刪除</button>
             {{/if}}
         {{/if}}
     </div>
     <hr>
     <div class="container">
-        {{foreach $arrays_msg as $array_msg}}
-            <div id="{{$array_msg['msg_id']}}">
+        {{foreach $msgDataObj as $msgArray}}
+            <div id="{{$msgArray['msgId']}}">
                 <tr>
                     <td>
-                        留言者 : {{$array_msg['msg_name']}} <br>
+                        留言者 : {{$msgArray['msgName']}} <br>
                     </td>
                     <td>
-                        內容 : {{$array_msg['msg_content']}} <br>
+                        內容 : {{$msgArray['msgContent']}} <br>
                     </td>
                     <td>
-                        留言時間 : {{$array_msg['msg_date']}} <br>
+                        留言時間 : {{$msgArray['msgDate']}} <br>
                     </td>
-                    {{if isset($nickname) && $array_msg['user_id'] == $user_id}}
-                        <a href="msg_update.php?id={{$array_msg['msg_id']}}" class="btn btn-success col-sm-0.5" role="button">編輯</a>
-                        <button class="btn btn-danger offset-sm-4" type="button" id="btnDeleteMsg" value="{{$array_msg['msg_id']}}">刪除</button>
+                    {{if isset($nickName) && $msgArray['userId'] == $nowUserId}}
+                        <a href="msg_update.php?id={{$msgArray['msgId']}}" class="btn btn-success col-sm-0.5" role="button">編輯</a>
+                        <button class="btn btn-danger offset-sm-4" type="button" id="btnDeleteMsg" value="{{$msgArray['msgId']}}">刪除</button>
                     {{/if}}
                 </tr>
                 <hr>

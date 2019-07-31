@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.33, created on 2019-07-30 10:05:49
+/* Smarty version 3.1.33, created on 2019-07-31 04:32:37
   from 'C:\xampp\htdocs\msg\Controller\templates\add.html' */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.33',
-  'unifunc' => 'content_5d3ffa5da89836_70284860',
+  'unifunc' => 'content_5d40fdc58e1114_64891710',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'e20fc9a2d48c7c4204b91f10cd94544b230238c7' => 
     array (
       0 => 'C:\\xampp\\htdocs\\msg\\Controller\\templates\\add.html',
-      1 => 1564473944,
+      1 => 1564540356,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_5d3ffa5da89836_70284860 (Smarty_Internal_Template $_smarty_tpl) {
+function content_5d40fdc58e1114_64891710 (Smarty_Internal_Template $_smarty_tpl) {
 ?><!DOCTYPE html>
 <html>
     <head>
@@ -48,9 +48,9 @@ function content_5d3ffa5da89836_70284860 (Smarty_Internal_Template $_smarty_tpl)
     <body>
         <nav class="nav nav-tabs">
             <ul class="nav navbar-nav">
-                <?php if (isset($_smarty_tpl->tpl_vars['nickname']->value)) {?>
+                <?php if (isset($_smarty_tpl->tpl_vars['nickName']->value)) {?>
                     <li class="nav-item">
-                        <a class="nav-link" ><?php echo $_smarty_tpl->tpl_vars['nickname']->value;?>
+                        <a class="nav-link" ><?php echo $_smarty_tpl->tpl_vars['nickName']->value;?>
 </a>
                     </li>
                     <li class="nav-item">
